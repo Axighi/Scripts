@@ -1,0 +1,48 @@
+.register{
+	margin:100px;
+	background-color:black;
+	text-align: center;
+}
+
+body{
+	width: 100%;
+	display: -webkit-box;
+	-webkit-box-pack:center;
+	-webkit-box-orient:vertical;
+}
+
+.index_body{
+	max-width: 1200px;
+	margin:20px 0px;
+	display: -webkit-box;
+	-webkit-box-orient:vertical;
+}
+
+.index_image{
+	width: 400px;
+	height: 300px;
+	border: 1px solid purple;
+	text-align: center;
+	display: -webkit-box;
+	-webkit-box-orient:vertical;
+}
+
+.image{
+	width: 360px;
+	height: 250px;
+}
+
+header,section,footer,aside,nav,article,hgroup{
+	display: block;
+}
+
+.body_footer{
+	text-align: center;
+	padding:20px;
+	border-top: blue;
+}
+
+
+
+
+
