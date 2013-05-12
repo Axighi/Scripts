@@ -4,56 +4,70 @@
 
 using namespace std;
 
-//constructor,construct a empty whose head point at NULL
-Alist::Alist()
+// NODE::NODE()
+// {
+// 	next=NULL;
+// }
+
+// NODE::NODE(int a)
+// {
+// 	data=a;
+// 	next=NULL;
+// }
+
+//List constructor,new a head nod
+List::List()
 {
-	this.head=NULL;
+	
 	this.size=0;
+	head=new NODE();
 }
 
-//deconstructor
-Alist::~Alist()
+//List deconstructor
+List::~List()
 {
 	while(this.head!=NULL)
 	{
-		panode temp=head.next;
+		NODE temp=head;
 		delete head;
 		head=temp;
+		size--;
 	}
 }
 
-void Alist::init()
-{
-	int a;
 
-	cout<<"enter a integer:"<<endl;
-	cin>>a;
+int List::getSize()
+{
+	return size;
 }
 
-int Alist::getSize()
+void List::insert(int a)
 {
-	return this.size;
-}
-
-void Alist::insertAt(int k,int i)
-{
-	if (i>-1)
+	if (size==0)
 	{
-		if (size==0)
-		{	
-			cout<<"the list is empty,your data has been inserted at head."<<endl;
-			panode a;
-				
+		head.data=a;
+		size++;
+	}else{
+		NODE *tmp;
+		tmp=&head;
+		while(size!=1)
+		{
+			tmp=tmp->next;
+			size--;
 		}
+		NODE tmp1=new NODE(a);
+		(*tmp)->next=&tmp1;
 	}
 }
 
-void Alist::removeAt(int i)
+void List::travel()
 {
-
-}
-
-void Alist::travel()
-{
-
+	NODE *tmp;
+	tmp=head;
+	while(size!=0)
+	{
+		cout<<tmp.data<<endl;
+		tmp=*tmp->next;
+		size--;
+	}
 }

@@ -2,44 +2,55 @@
  
 
 //define a list node struct
-typedef struct anode_
+typedef struct NODE
 {
- int data;  //data
- struct *anode_ next;  //a pointer to next node
-}andoe;
-//anode==struct anode_    define a new node
-//*panode == struct anode_*      difen a pointer to the node
- 
-//list class
-class Alist
+	int data;  //data
+	struct NODE *next;  //a pointer to next node
+
+	//first constructor,only set next=null
+	NODE()
+	{
+		next=NULL;
+	}
+
+	//second constructor,set a value to data
+	NODE(int a)
+	{
+		data=a;
+		next=NULL;
+	}
+}NODE;
+//NODE==struct NODE_    define a new node
+
+class List
 {
 public:
- Alist();
- ~Alist();
- 
- //initialize a list
- void init();
- 
- //get size of the list
- int getSize();
- 
- //insert k at i,before node i
- void insertAt(int k,int i);
- 
- //remove node i from list
- void removeAt(int i);
- 
- //find a node by data
- void find(int i);
- 
- //get node i
- int getNodeAt(int i);
- 
- //travel the list
- void travel();
- 
+	List();
+	~List();
+
+	//get size of the list
+	int getSize();
+
+	//insert a at k,before node k
+	void insert(int a,int k);
+
+	//insert after the tail
+	void insert(int a);
+
+	//remove node i from list
+	void remove(int k);
+
+	//find a node by data
+	void find(int a);
+
+	//get node i
+	int getNodeAt(int i);
+
+	//travel the list
+	void travel();
+
 
 private:
- anode head;  //the head node of the list
- int size;  //length of the list
+	NODE head;  //the head node of the list
+	int size;  //length of the list
 };
