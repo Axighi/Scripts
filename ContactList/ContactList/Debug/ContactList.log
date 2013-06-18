@@ -1,0 +1,3 @@
+﻿  Contact.cpp
+LINK : fatal error LNK1561: entry point must be defined
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V110\Microsoft.CppCommon.targets(611,5): error MSB6006: "link.exe" exited with code 1561.
