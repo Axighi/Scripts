@@ -1,3 +1,0 @@
-#!/bin/bash
-today=`date+%y%m%d`
-ls -al > log.$today

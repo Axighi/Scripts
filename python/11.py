@@ -5,3 +5,4 @@ def a(x):
 
 n = a(-10)
 print n
+print()

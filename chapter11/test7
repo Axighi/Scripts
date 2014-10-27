@@ -1,8 +1,0 @@
-#!/bin/bash
-#testing string equality
-testuser=axighi
-
-if [ $USER = $testuser ]
-then
-	echo "Welcome $testuser"
-fi

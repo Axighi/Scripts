@@ -1,8 +1,6 @@
-#include "List.h"
+#include <iostream>
 
 int main(){
-	NODE a=NODE(55);
-	List A;
-	std::cout<<A.getLength()<<std::endl;
+	std::cout << "hi" << std::endl;
 	return 0;
 }
