@@ -1,4 +1,4 @@
-(function()
-	var a = "re"
-	alert("hi")
-});
+(function(){
+	var a = "re";
+	alert("hi");
+})();
