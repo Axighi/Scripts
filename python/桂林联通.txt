@@ -1,0 +1,3 @@
+guilin_latitude.txt
+
+guilin_longtitude.txt
