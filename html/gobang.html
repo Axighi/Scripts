@@ -1,0 +1,202 @@
+<html>
+<head>
+	<title>Gobang!</title>
+	<script type='text/javascript' id='lt_ws' src='http://localhost:6939/socket.io/lighttable/ws.js'></script>
+</head>
+<body onLoad="init();">
+	<div style="text-align:center">
+		<canvas id="board" width=480 height=480 style="background-color:#976A42">
+		Your browser doesn't support html5 feature.
+		</canvas>
+		<br>
+		<canvas id="info" width="300" height="50"></canvas>
+		<br>
+		<canvas id="info1" width="300" height="50"></canvas>
+		<br>
+		<button id="start" onclick="start();" style="width:100;height:50;font-size:25">Start</button>
+	</div>
+
+	<div id="ajax">
+	change this	
+	</div>
+	<button type="button" onclick="useAjax();">need change</button>
+
+	<script>
+	UNIT=30;   //size of one unit of the board
+	TURN=0;  //a flag controlling who's turn to move.0:can't move;1:white;2:black
+	SPOT=[];  //store all the spots have been taken
+	ACTION=0;  //total actions taken
+
+	//define a spot constructor
+	function Spot(centerX,centerY){
+		this.centerX=centerX;
+		this.centerY=centerY;
+		this.taken=false;  //0:no piece;1:white;2:black
+		this.draw=draw;
+	}
+
+	//create an XmlHttpRequest object
+    function createXmlHttpRequest() {
+		if (window.XMLHttpRequest)
+		{// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp=new XMLHttpRequest();
+		}
+		else
+		{// code for IE6, IE5
+		xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		return xmlhttp;
+    }
+
+    function useAjax(){
+    	var xhr=createXmlHttpRequest();
+    	var url="ajax.txt";
+    	xhr.open("GET",url,true);
+    	xhr.onreadystatechange=function(){
+    		if(xhr.readyState==4 && xhr.status==200){
+    			document.getElementById("ajax").innerHTML=xhr.responseText;
+    		}
+    	}
+    	xhr.send();
+    }
+
+	//set spot center's x coordinate of the spot
+	function setSpotX(boardX){
+		var centerX;
+		if (boardX%UNIT==0) {
+			centerX=boardX;
+		}else{
+			if(boardX%UNIT<UNIT/2){
+				centerX=UNIT*(Math.floor(boardX/UNIT));
+			}else{
+				centerX=UNIT*(Math.floor(boardX/UNIT)+1);
+			}
+		}
+		return centerX;
+	}
+
+	//set spot center's y coordinate of the spot
+	function setSpotY(boardY){
+		var centerY;
+		if(boardY%UNIT==0){
+			centerY=boardY;
+		}else{
+			if(boardY%UNIT<UNIT/2){
+				centerY=UNIT*(Math.floor(boardY/UNIT));
+			}else{
+				centerY=UNIT*(Math.floor(boardY/UNIT)+1);
+			}
+		}
+		return centerY;
+	}
+
+	function draw(){
+		turn=TURN;  //know what piece to draw
+		radius=10;  //size of piece
+		ctx.beginPath();
+		ctx.arc(centerX,centerY,radius,2*Math.PI,false);
+		ctx.closePath();
+
+		switch(turn){
+			case 0:
+				return false;
+				break;
+			case 1:
+				drawWhitePiece();
+				TURN=2;  //black turn
+				break;
+			case 2:
+				drawBlackPiece();
+				TURN=1;  //white turn
+				break;
+		}
+	}
+
+	function start(){
+		TURN=1;
+		alert("White first.");
+	}
+
+	function end(){}
+
+	//get the coordinates of the click and generate a responding spot object
+	function setPiece(ev){
+		var rect=board.getBoundingClientRect();  //position of the board
+		boardX=ev.clientX-rect.left;  //coordinate X of the mouse in the board
+		boardY=ev.clientY-rect.top;  //coordinate Y of the mouse in the board
+		//ensure click within the board
+		if((boardX>UNIT/2)&&(boardX<UNIT*15+UNIT/2)&&(boardY>UNIT/2)&&(boardY<UNIT*15+UNIT/2)){
+			centerX=setSpotX(boardX);
+			centerY=setSpotY(boardY);
+
+			//check if the spot has been taken
+			for(i=0;i<SPOT.length;i++){
+				if((SPOT[i].centerX==centerX)&&(SPOT[i].centerY==centerY)){
+					return false;
+				}
+			}
+
+			SPOT[ACTION]=new Spot(centerX,centerY);
+			SPOT[ACTION].draw();
+			SPOT[ACTION].taken=true;  //the spot has been taken,can't draw piece any more
+			ACTION++;
+
+			info=document.getElementById('info');
+			info1=document.getElementById('info1');
+			var message='Actions:'+ACTION;
+			writeMessage(info,message);
+			var message1='Total taken spots:'+SPOT.length;
+			writeMessage(info1,message1);
+		}
+	}
+
+	function drawWhitePiece(){
+		ctx.fillStyle="white";
+		ctx.fill();
+	}
+
+	function drawBlackPiece(){
+		ctx.fillStyle="black";
+		ctx.fill();
+	}
+
+	function drawBoard(){
+		ctx.strokeStyle="black";
+		ctx.lineWidth=2;
+
+		//start position from where to draw the board
+		var startX=UNIT;
+		var startY=UNIT;
+
+		//draw horizontal lines
+		for (var i = 0; i < 15; i++) {
+			ctx.moveTo(UNIT,startY+i*UNIT);
+			ctx.lineTo(UNIT*15,startY+UNIT*i);
+		}
+
+		startY=UNIT;      //reset the start position
+		//draw vertical lines
+		for(var i=0;i<15;i++){
+			ctx.moveTo(startX+i*UNIT,UNIT);
+			ctx.lineTo(startX+i*UNIT,UNIT*15);
+		}
+		ctx.stroke();
+	}
+
+	function writeMessage(canvas, message) {
+        var context = canvas.getContext('2d');
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.font = '18pt Calibri';
+        context.fillStyle = 'black';
+        context.fillText(message, 10, 25);
+    }
+
+	function init(){
+		board=document.getElementById('board');
+		ctx=board.getContext('2d');
+		drawBoard();
+		board.addEventListener("click",function(ev){if(TURN!=0){setPiece(ev);}},false);
+	}
+	</script>
+</body>
+</html>
