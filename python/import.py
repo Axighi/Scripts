@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import sys
 from xlrd import open_workbook
 
 class Instruction(object):
@@ -12,7 +13,7 @@ class Instruction(object):
         return('{0}: \'{1}\',\n'
             '{0}Info: \'{2}\',').format(self.key.encode('utf8'), self.title.encode('utf8'), self.content.encode('utf8'))
 
-wb = open_workbook('instructions.xls')
+wb = open_workbook(sys.argv[1])
 for sheet in wb.sheets():
     number_of_rows = sheet.nrows
     number_of_columns = sheet.ncols
@@ -38,4 +39,5 @@ for item in items:
 
 f = open('temp.txt', 'w')
 for item in items:
-f.write(item)
+    f.write(str(item))
+f.close()
